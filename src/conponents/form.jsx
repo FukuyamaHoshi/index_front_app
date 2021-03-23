@@ -1,17 +1,10 @@
-import { useState } from "react";
 
 function Form(props) {
-
-    const [value, setValue] = useState('');
-
-    const handleChange = (e) => {
-        setValue(e.target.value);
-    }
 
     return (
         <form onSubmit={props.doSubmit}>
             <label>{props.name}  
-                <input type="text" value={value} onChange={handleChange}/>
+                <input type="text" value={props.displayValue} onChange={props.doChange}/>
             </label>
         </form>
     )
