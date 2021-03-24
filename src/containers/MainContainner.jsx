@@ -8,12 +8,14 @@ import SubContainer from './SubContainer';
 
 function MainContainer() {
 
-    const postUrl = 'http://localhost:3001/pont/create';
-    const getAllurl = 'http://localhost:3001/pont/post';
+    const createUrl = 'http://localhost:3001/pont/create';
+    const deleteUrl = 'http://localhost:3001/pont/delete';
 
     const [nameValue, setNamevalue] = useState('');
-    const [ageValue, setAgevalue] = useState(0);
+    const [ageValue, setAgevalue] = useState('');
     const [sexValue, setSexvalue] = useState('');
+
+    const [user, setUser] = useState([]);
 
     const handleNameChange = (e) => {
         setNamevalue(e.target.value);
@@ -29,34 +31,51 @@ function MainContainer() {
 
     const handleButtonSubmit = (e) => {
 
-        axios.post(postUrl, {
+        const myUid = getUniqueStr()
+
+        axios.post(createUrl, {
             name: nameValue,
             age: ageValue,
-            sex: sexValue
+            sex: sexValue,
+            uuid: myUid
         })
         .then((response) => {
-            console.log(response.data);
-            const data = response.data;
-
-            const name = data.name;
-            const age = data.age;
-            const sex = data.sex;
-
-
+            setUser([
+                ...user,
+                {
+                    name: nameValue,
+                    age: ageValue,
+                    sex: sexValue,
+                    uuid: myUid
+                }
+            ]);
         })
         .catch((error) => {
             console.log(error);
         })
     }
 
-    const fetch = () => {
-        axios.get(getAllurl)
+    const deleteUser = (e) => {
+        let targetUid = e.currentTarget.getAttribute('data-num');
+        
+        axios.post(deleteUrl,{
+            uuid: targetUid
+        })
         .then((response) => {
-            console.log(response.data);
+            var result = user.filter(function(i) {
+                return i.uuid !== targetUid;
+            });
+            setUser(result);
         })
         .catch((error) => {
             console.log(error);
+            console.log('失敗');
         })
+    }
+
+    function getUniqueStr() {
+        var strong = 1000;
+        return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16);
     }
 
     return (
@@ -69,8 +88,11 @@ function MainContainer() {
                 <SubmitButton doClick={handleButtonSubmit}/>
                 </div>
             </div>
-            <SubContainer/>
-
+            {
+                user.map((value, index) => (
+                    <SubContainer nameValue={value.name} ageValue={value.age} sexValue={value.sex} uuidValue={value.uuid} deleteClick={deleteUser}/>
+                ))
+            }
         </div>
     )
 }

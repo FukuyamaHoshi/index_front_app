@@ -14,8 +14,8 @@ export default function SubContainer(props) {
                 <label>性別 : </label><label id="sex-value">{props.sexValue}</label>
                 </div>
                 <div id="buttons-wrap">
-                    <button id="edit-button">編集</button>
-                    <button id="delete-button">削除</button>
+                    <button id="edit-button" onClick={props.editClick}>編集</button>
+                    <button id="delete-button" onClick={props.deleteClick} data-num={props.uuidValue}>削除</button>
                 </div>
             </div>
         </div>
