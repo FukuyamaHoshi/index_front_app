@@ -34,6 +34,8 @@ function MainContainer() {
     }
 
     const handleButtonSubmit = (e) => {
+        e.preventDefault();
+
         if (editFlg == false) {
         const myUid = getUniqueStr()
 
@@ -84,6 +86,10 @@ function MainContainer() {
                console.log('失敗');
            })
        }
+
+        setNamevalue('');
+        setAgevalue('');
+        setSexvalue('');
     }
 
     const deleteUser = (e) => {
